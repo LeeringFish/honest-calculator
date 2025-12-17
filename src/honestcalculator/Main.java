@@ -10,9 +10,12 @@ public class Main {
         String msg1 = "Do you even know what numbers are? Stay focused!";
         String msg2 = "Yes ... an interesting math operation. You've slept through all classes, haven't you?";
         String msg3 = "Yeah... division by zero. Smart move...";
-        String calc, oper, xString, yString;
+        String msg4 = "Do you want to store the result? (y / n):";
+        String msg5 = "Do you want to continue calculations? (y / n):";
+        String calc, oper, xString, yString, userChoice;
         String[] parts;
-        double x, y;
+        float x, y;
+        float memory = 0, result;
 
         while (true) {
             System.out.println(msg0);
@@ -27,20 +30,54 @@ public class Main {
             oper = parts[1];
             yString = parts[2];
 
+            if ("M".equals(xString)) {
+                xString = Float.toString(memory);
+            }
+
+            if ("M".equals(yString)) {
+                yString = Float.toString(memory);
+            }
+
             if (notANumber(xString) || notANumber(yString)) {
                 System.out.println(msg1);
+                continue;
             } else if (!oper.matches("[-+*/]")) {
                 System.out.println(msg2);
+                continue;
             } else {
-                x = Double.parseDouble(xString);
-                y = Double.parseDouble(yString);
+                x = Float.parseFloat(xString);
+                y = Float.parseFloat(yString);
 
                 if ("/".equals(oper) && y == 0) {
                     System.out.println(msg3);
+                    continue;
                 } else {
+                    result = performOperation(x, y, oper);
                     System.out.println(performOperation(x, y, oper));
                 }
             }
+
+            while (true) {
+                System.out.println(msg4);
+                userChoice = keyboard.nextLine();
+
+                if ("y".equals(userChoice)) {
+                    memory = result;
+                    break;
+                } else if ("n".equals(userChoice)) {
+                    break;
+                }
+            }
+
+            do {
+                System.out.println(msg5);
+                userChoice = keyboard.nextLine();
+            } while (!"y".equals(userChoice) && !"n".equals(userChoice));
+
+            if ("n".equals(userChoice)) {
+                break;
+            }
+
         }
     }
 
@@ -48,8 +85,8 @@ public class Main {
         return !str.matches("-?\\d+(\\.\\d+)?");
     }
 
-    public static double performOperation(double x, double y, String oper) {
-        double result = 0;
+    public static float performOperation(float x, float y, String oper) {
+        float result = 0;
         if ("+".equals(oper)) {
             result = x + y;
         } else if ("-".equals(oper)) {
@@ -62,5 +99,7 @@ public class Main {
 
         return result;
     }
+
+
 
 }
