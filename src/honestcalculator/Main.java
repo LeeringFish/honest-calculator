@@ -100,6 +100,10 @@ public class Main {
         return result;
     }
 
+    public static boolean isOneDigit(float v) {
+        return (v > -10 && v < 10 && v % (int) v == 0);
+    }
+
 
 
 }
