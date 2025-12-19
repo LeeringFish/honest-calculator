@@ -48,6 +48,8 @@ public class Main {
                 x = Float.parseFloat(xString);
                 y = Float.parseFloat(yString);
 
+                check(x, y, oper);
+
                 if ("/".equals(oper) && y == 0) {
                     System.out.println(msg3);
                     continue;
@@ -102,6 +104,28 @@ public class Main {
 
     public static boolean isOneDigit(float v) {
         return (v > -10 && v < 10 && v % (int) v == 0);
+    }
+
+    public static void check(float x, float y, String oper) {
+        StringBuilder msg = new StringBuilder();
+        if (isOneDigit(x) && isOneDigit(y)) {
+            msg.append(" ... lazy");
+        }
+
+        if ("*".equals(oper) && (x == 1 || y == 1)) {
+            msg.append(" ... very lazy");
+        }
+
+        if ((x == 0 || y == 0) &&
+                ("*".equals(oper) || "+".equals(oper) || "-".equals(oper))) {
+            msg.append(" ... very, very lazy");
+        }
+
+        if (!msg.toString().isEmpty()) {
+            msg.insert(0, "You are");
+            System.out.println(msg);
+        }
+
     }
 
 
