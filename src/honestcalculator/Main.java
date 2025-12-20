@@ -6,19 +6,14 @@ public class Main {
     public static void main(String[] args) {
         Scanner keyboard = new Scanner(System.in);
 
-        String msg0 = "Enter an equation";
-        String msg1 = "Do you even know what numbers are? Stay focused!";
-        String msg2 = "Yes ... an interesting math operation. You've slept through all classes, haven't you?";
-        String msg3 = "Yeah... division by zero. Smart move...";
-        String msg4 = "Do you want to store the result? (y / n):";
-        String msg5 = "Do you want to continue calculations? (y / n):";
+        HonestCalculator calculator = new HonestCalculator();
         String calc, oper, xString, yString, userChoice;
         String[] parts;
         float x, y;
-        float memory = 0, result;
+        float result;
 
         while (true) {
-            System.out.println(msg0);
+            calculator.printMessage(0);
             calc = keyboard.nextLine();
 
             if ("".equals(calc)) {
@@ -31,27 +26,27 @@ public class Main {
             yString = parts[2];
 
             if ("M".equals(xString)) {
-                xString = Float.toString(memory);
+                xString = Double.toString(calculator.getMemory());
             }
 
             if ("M".equals(yString)) {
-                yString = Float.toString(memory);
+                yString = Double.toString(calculator.getMemory());
             }
 
             if (notANumber(xString) || notANumber(yString)) {
-                System.out.println(msg1);
+                calculator.printMessage(1);
                 continue;
             } else if (!oper.matches("[-+*/]")) {
-                System.out.println(msg2);
+                calculator.printMessage(2);
                 continue;
             } else {
                 x = Float.parseFloat(xString);
                 y = Float.parseFloat(yString);
 
-                check(x, y, oper);
+                HonestCalculator.check(x, y, oper);
 
                 if ("/".equals(oper) && y == 0) {
-                    System.out.println(msg3);
+                    calculator.printMessage(3);
                     continue;
                 } else {
                     result = performOperation(x, y, oper);
@@ -60,19 +55,20 @@ public class Main {
             }
 
             while (true) {
-                System.out.println(msg4);
+                calculator.printMessage(4);
                 userChoice = keyboard.nextLine();
 
                 if ("y".equals(userChoice)) {
-                    memory = result;
+                    calculator.storeResult(result);
                     break;
                 } else if ("n".equals(userChoice)) {
                     break;
                 }
             }
 
+            userChoice = "";
             do {
-                System.out.println(msg5);
+                calculator.printMessage(5);
                 userChoice = keyboard.nextLine();
             } while (!"y".equals(userChoice) && !"n".equals(userChoice));
 
@@ -101,33 +97,4 @@ public class Main {
 
         return result;
     }
-
-    public static boolean isOneDigit(float v) {
-        return (v > -10 && v < 10 && v % (int) v == 0);
-    }
-
-    public static void check(float x, float y, String oper) {
-        StringBuilder msg = new StringBuilder();
-        if (isOneDigit(x) && isOneDigit(y)) {
-            msg.append(" ... lazy");
-        }
-
-        if ("*".equals(oper) && (x == 1 || y == 1)) {
-            msg.append(" ... very lazy");
-        }
-
-        if ((x == 0 || y == 0) &&
-                ("*".equals(oper) || "+".equals(oper) || "-".equals(oper))) {
-            msg.append(" ... very, very lazy");
-        }
-
-        if (!msg.toString().isEmpty()) {
-            msg.insert(0, "You are");
-            System.out.println(msg);
-        }
-
-    }
-
-
-
 }
